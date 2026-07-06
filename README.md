@@ -12,10 +12,10 @@ Built for **research and educational purposes** into UE5 memory layout, offset r
 
 LIADAM runs as a **separate process** alongside the game. It attaches read-only to `PenguinHotel-Win64-Shipping.exe`, walks the Unreal Engine object model to resolve offsets dynamically each run, and draws an ESP on top of a transparent Direct3D 11 layer.
 
-- **External** — no injection, no code lives inside the game.
-- **Read-only** — every memory access is `ReadProcessMemory`. Nothing is written back to the game.
-- **Self-contained** — one `.exe`, no dependencies, no runtimes to install.
-- **Standard Windows APIs** — no drivers, no kernel access, no hypervisor tricks.
+- **External.** No injection, no code lives inside the game.
+- **Read-only.** Every memory access is `ReadProcessMemory`. Nothing is written back to the game.
+- **Self-contained.** One `.exe`, no dependencies, no runtimes to install.
+- **Standard Windows APIs.** No drivers, no kernel access, no hypervisor tricks.
 
 ## Features
 
@@ -33,7 +33,7 @@ LIADAM runs as a **separate process** alongside the game. It attaches read-only 
 - Administrator privileges (memory reads across processes require it)
 - MECCHA CHAMELEON running before you attach
 
-There are **no runtime downloads** — the exe is fully self-contained. No .NET, no Visual C++ Redistributable, no external DLLs.
+There are **no runtime downloads**. The exe is fully self-contained. No .NET, no Visual C++ Redistributable, no external DLLs.
 
 ## Install & run
 
@@ -63,14 +63,14 @@ The source code is **intentionally not public**. Two reasons:
 1. **Skid protection.** Publishing the source is an open invitation for people who don't understand the code to compile and redistribute knock-offs, which floods the game with more cheaters. That's the opposite of what this project is for.
 2. **Game health.** Fewer working forks in circulation means a better experience for real players.
 
-If you're doing similar research and want to talk about specific techniques in general terms — pattern scanning, UStruct child-property walks, FName pool layout detection, W2S math — DM me. I'm happy to discuss.
+If you're doing similar research and want to talk about specific techniques in general terms (pattern scanning, UStruct child-property walks, FName pool layout detection, W2S math), DM me. I'm happy to discuss.
 
 ## What this is NOT
 
 To be very clear about the intent, LIADAM is deliberately **not** any of the following:
 
-- **Not obfuscated.** The binary is a plain Visual Studio release build. No packing, no VM protection, no anti-debug, no multi-layer deob. If you're worried it's malware, load it in Ghidra / Binary Ninja and read it — I'd rather you verify than trust me. The trade-off is that it's also trivially fingerprintable by anti-cheat, which is fine: an easy-to-detect research overlay is exactly the point.
-- **Not driver-based.** Mouse aiming uses `SendInput` — a normal Windows user-mode API call. It is **not** a signed HID-emulation driver (Interception / Logitech LGHUB abuse / MAKCU-style hardware) and it is **trivially detectable** by any anti-cheat that cares to look. Also intentional.
+- **Not obfuscated.** The binary is a plain Visual Studio release build. No packing, no VM protection, no anti-debug, no multi-layer deob. If you're worried it's malware, load it in Ghidra / Binary Ninja and read it. I'd rather you verify than trust me. The trade-off is that it's also trivially fingerprintable by anti-cheat, which is fine: an easy-to-detect research overlay is exactly the point.
+- **Not driver-based.** Mouse aiming uses `SendInput`, a normal Windows user-mode API call. It is **not** a signed HID-emulation driver (Interception / Logitech LGHUB abuse / MAKCU-style hardware) and it is **trivially detectable** by any anti-cheat that cares to look. Also intentional.
 - **No token grabbing, no info stealing.** No Discord token exfil, no browser cookie / password stealing, no clipboard sniffing, no keylogging, no screenshotting, no persistence, no autorun, no telemetry. LIADAM never talks to the network.
 - **No self-modifying code, no runtime unpacking, no hijacking of other processes.**
 
@@ -80,7 +80,7 @@ If I wanted to build something harmful or hard to remove I would have built some
 
 There is a second variant of LIADAM I built as a research exercise: memory reads via **DMA** (PCILeech + MemProcFS `VMMDLL_MemReadEx`) and mouse output routed through a **MAKCU** hardware mouse over USB serial.
 
-That variant is **not published**. If this repo gets **5 stars**, I'll upload it too. Honest disclosure — porting the external build to DMA was mostly a mechanical exercise: the memory read primitive is the only real difference (`ReadProcessMemory` → `VMMDLL_MemReadEx`), and mouse output is `SendInput` → serial write. Everything above those two calls (offset resolution, world-to-screen, rendering, menu) is byte-identical between the two builds.
+That variant is **not published**. If this repo gets **5 stars**, I'll upload it too. Honest disclosure: porting the external build to DMA was mostly a mechanical exercise. The memory read primitive is the only real difference (`ReadProcessMemory` becomes `VMMDLL_MemReadEx`), and mouse output goes from `SendInput` to a serial write. Everything above those two calls (offset resolution, world-to-screen, rendering, menu) is byte-identical between the two builds.
 
 ## Legal / Takedown
 
