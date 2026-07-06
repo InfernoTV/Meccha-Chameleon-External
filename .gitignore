@@ -1,0 +1,15 @@
+# Runtime files created next to the exe
+liadam.cfg
+meccha_esp_log.txt
+imgui.ini
+
+# OS / editor cruft
+Thumbs.db
+desktop.ini
+.DS_Store
+.vscode/
+.vs/
+.idea/
+*.tmp
+*.bak
+*.log
